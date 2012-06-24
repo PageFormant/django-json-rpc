@@ -26,7 +26,7 @@ Features:
 
     ## myproj/myapp/views.py
     
-    from jsonrpc import jsonrpc_method
+    from django_jsonrpc import jsonrpc_method
     
     @jsonrpc_method('myapp.sayHello')
     def whats_the_time(request, name='Lester'):
@@ -40,7 +40,7 @@ Features:
     ## myproj/urls.py
     
     from django.conf.urls.defaults import *
-    from jsonrpc import jsonrpc_site
+    from django_jsonrpc import jsonrpc_site
     import myproj.myapp.views # you must import the views that need connected
     
     urlpatterns = patterns('', 
@@ -56,7 +56,7 @@ You can test your service using the provided graphical browser and console,
 available at http://YOUR_URL/json/browse/ (if using the url patterns from above)
 or with the included ServiceProxy::
 
-    >>> from jsonrpc.proxy import ServiceProxy
+    >>> from django_jsonrpc.proxy import ServiceProxy
 
     >>> s = ServiceProxy('http://localhost:8080/json/')
 
@@ -93,7 +93,7 @@ Adding JSON-RPC to your application
 
 ::
 
-    from jsonrpc import jsonrpc_method
+    from django_jsonrpc import jsonrpc_method
 
     @jsonrpc_method('app.register')
     def register_user(request, username, password):
@@ -111,7 +111,7 @@ Adding JSON-RPC to your application
 
 ::
 
-    from jsonrpc import jsonrpc_site
+    from django_jsonrpc import jsonrpc_site
     import app.views
 
     urlpatterns = patterns('', 
@@ -295,7 +295,7 @@ the beginning of your method.
     'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Topic :: Software Development :: Libraries :: Python Modules'],
-  packages=['jsonrpc'],
+  packages=['django_jsonrpc'],
   zip_safe = False, # we include templates and tests
   install_requires=['Django>=1.0'],
-  package_data={'jsonrpc': ['templates/*']})
+  package_data={'django_jsonrpc': ['templates/*']})

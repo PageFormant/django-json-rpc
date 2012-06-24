@@ -1,8 +1,8 @@
 import urllib, uuid
 from django.test.client import FakePayload
 
-from jsonrpc._json import loads, dumps
-from jsonrpc.types import *
+from django_jsonrpc._json import loads, dumps
+from django_jsonrpc.types import *
 
 class ServiceProxy(object):
   def __init__(self, service_url, service_name=None, version='1.0'):

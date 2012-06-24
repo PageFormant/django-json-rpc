@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from jsonrpc.site import jsonrpc_site
+from django_jsonrpc.site import jsonrpc_site
 
 urlpatterns = patterns('', 
   url(r'^json/browse/$', 'jsonrpc.views.browse', name='jsonrpc_browser'),
