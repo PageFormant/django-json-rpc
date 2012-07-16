@@ -1,4 +1,4 @@
-import datetime, decimal
+import re, datetime, decimal
 from functools import wraps
 from uuid import uuid1
 from django_jsonrpc._json import loads, dumps
@@ -194,9 +194,10 @@ class JSONRPCSite(object):
     from django.http import HttpResponse
     json_encoder = json_encoder or self.json_encoder
 
+    # in case we do something json doesn't like, we always get back valid json-rpc response
+    response = self.empty_response()
+    
     try:
-      # in case we do something json doesn't like, we always get back valid json-rpc response
-      response = self.empty_response()
       if request.method.lower() == 'get':
         valid, D = self.validate_get(request, method)
         if not valid:
@@ -216,22 +217,26 @@ class JSONRPCSite(object):
         response, status = self.response_dict(request, D, json_encoder=json_encoder)
         if response is None and (not u'id' in D or D[u'id'] is None): # a notification
           return HttpResponse('', status=status)
-
-      json_rpc = dumps(response, cls=json_encoder)
     except Error, e:
       signals.got_request_exception.send(sender=self.__class__, request=request)
+
       response['error'] = e.json_rpc_format
       status = e.status
-      json_rpc = dumps(response, cls=json_encoder)
     except Exception, e:
       # exception missed by others
-      signals.got_request_exception.send(sender=self.__class__, request=request)
+      signals.got_request_exception.send(sender=self.__class__, request=request)      
+
       other_error = OtherError(e)
+
       response['result'] = None
       response['error'] = other_error.json_rpc_format
       status = other_error.status
 
-      json_rpc = dumps(response,cls=json_encoder)
+    # extract id the request
+    if D and u'id' in D:
+        response['id'] = D[u'id']
+    
+    json_rpc = dumps(response, cls=json_encoder)
 
     return HttpResponse(json_rpc, status=status, content_type='application/json-rpc')
 
