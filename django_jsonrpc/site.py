@@ -149,7 +149,7 @@ class JSONRPCSite(object):
 
       encoder = json_encoder()
       if not sum(map(lambda e: isinstance(R, e), # type of `R` should be one of these or...
-         (dict, str, unicode, int, long, list, set, NoneType, bool))):
+         (dict, str, unicode, int, long, float, list, set, NoneType, bool))):
         try:
           rs = encoder.default(R) # ...or something this thing supports
         except TypeError, exc:
@@ -196,7 +196,7 @@ class JSONRPCSite(object):
 
     # in case we do something json doesn't like, we always get back valid json-rpc response
     response = self.empty_response()
-    
+
     try:
       if request.method.lower() == 'get':
         valid, D = self.validate_get(request, method)
@@ -226,7 +226,7 @@ class JSONRPCSite(object):
       # exception missed by others
       signals.got_request_exception.send(sender=self.__class__, request=request)
 
-      other_error = OtherError(e)
+      other_error = OtherError(str(e))
 
       response['result'] = None
       response['error'] = other_error.json_rpc_format
