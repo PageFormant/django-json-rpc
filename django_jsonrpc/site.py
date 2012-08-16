@@ -224,7 +224,7 @@ class JSONRPCSite(object):
       status = e.status
     except Exception, e:
       # exception missed by others
-      signals.got_request_exception.send(sender=self.__class__, request=request)      
+      signals.got_request_exception.send(sender=self.__class__, request=request)
 
       other_error = OtherError(e)
 
@@ -235,10 +235,10 @@ class JSONRPCSite(object):
     # extract id the request
     if D and u'id' in D:
         response['id'] = D[u'id']
-    
+
     json_rpc = dumps(response, cls=json_encoder)
 
-    return HttpResponse(json_rpc, status=status, content_type='application/json-rpc')
+    return HttpResponse(json_rpc, status=status, content_type='application/json')
 
   def procedure_desc(self, key):
     M = self.urls[key]
